@@ -1,7 +1,7 @@
 const {Router} = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {check, validationResult} = require('express-validator');
+const {body, validationResult} = require('express-validator');
 const config = require('config');
 const User = require('../models/User');
 const router = Router();
@@ -9,8 +9,8 @@ const router = Router();
 // /api/auth/register
 router.post(
   '/register',
-  check('email', 'Wrong email').isEmail(),
-  check('password', 'Minimal password length is 6 symbols')
+  body('email', 'Wrong email').isEmail(),
+  body('password', 'Minimal password length is 6 symbols')
     .isLength({min: 6}),
   async (req, res) => {
     try {
@@ -44,8 +44,8 @@ router.post(
 // /api/auth/login
 router.post(
   '/login',
-  check('email', 'Wrong email').normalizeEmail().isEmail(),
-  check('password', 'Input password').exists(),
+  body('email', 'Wrong email').normalizeEmail().isEmail(),
+  body('password', 'Input password').exists(),
   async (req, res) => {
     try {
       const errors = validationResult(req);
